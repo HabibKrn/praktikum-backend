@@ -1,59 +1,101 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Praktikum Back-End Laravel - Pertemuan 3: Routing, Controller, Dependency Injection, dan Middleware
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Dokumentasi ini disusun untuk memenuhi laporan dan tugas praktikum Mata Kuliah **Pengembangan Web / Back-End (Pertemuan 3)**. Aplikasi ini merupakan layanan mini *back-end* berbasis **Laravel** yang menerapkan arsitektur web modern seperti *routing*, penanganan *controller*, *dependency injection*, serta proteksi keamanan mengunakan *middleware*.
 
-## About Laravel
+## 1. Identitas & Informasi Praktikum
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+* **Mata Kuliah:** Pengembangan Web
+* **Materi:** Route, Controller, Dependency Injection (DI), dan Middleware
+* **Framework:** Laravel 11.x / PHP >= 8.2
+* **Branch Git:** `praktikum/pertemuan-3`
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 2. Fitur & Tujuan Pembelajaran
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Routing Dasar & Parameters:**
+   * Menerapkan rute dasar (`/`, `/halo`).
+   * Menerapkan *route parameter* wajib (`/mahasiswa/{nim}`) dengan *constraint* angka (`whereNumber`).
+   * Menerapkan *route parameter* opsional (`/profil/{nama?}`).
+2. **Controller Structure:**
+   * Memisahkan logika aplikasi dari file rute ke `MahasiswaController` dan `KatalogController`.
+3. **Dependency Injection (DI):**
+   * Menggunakan kelas layanan `KatalogService` untuk mengelola data katalog mata kuliah yang disuntikkan (*injected*) ke dalam `KatalogController`.
+4. **Middleware Request Pipeline:**
+   * Membuat *middleware* kustom `CheckRole` yang didaftarkan dengan alias `role.admin` untuk memproteksi akses halaman administrasi.
 
-## Learning Laravel
+## 3. Cara Menjalankan Project Secara Lokal
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+Ikuti langkah-langkah berikut untuk menjalankan *project* ini di komputer Anda:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone Repository & Masuk ke Folder Project:**
+   ```bash
+   git clone <URL_REPOSITORY_GITHUB_ANDA>
+   cd praktikum-backend
+   ```
 
-## Laravel Sponsors
+2. **Install Dependensi Composer:**
+   ```bash
+   composer install
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. **Pengaturan File Environment (`.env`):**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-### Premium Partners
+4. **Jalankan Server Lokal Laravel:**
+   ```bash
+   php artisan serve
+   ```
+   Aplikasi dapat diakses melalui *browser* pada alamat: `http://127.0.0.1:8000`
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## 4. Daftar Endpoint API
 
-## Contributing
+Berikut adalah daftar seluruh rute (*endpoints*) yang terdaftar dalam aplikasi:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+| No | Method | Endpoint / URI | Fungsi / Deskripsi | Proteksi Middleware |
+| :---: | :---: | :--- | :--- | :---: |
+| 1 | `GET` | `/` | Cek status aktif layanan back-end | Tidak Ada |
+| 2 | `GET` | `/halo` | Menampilkan pesan salam dasar | Tidak Ada |
+| 3 | `GET` | `/mahasiswa/{nim}` | Menampilkan detail status NIM (wajib angka) | Tidak Ada |
+| 4 | `GET` | `/profil/{nama?}` | Menampilkan profil nama (parameter opsional) | Tidak Ada |
+| 5 | `GET` | `/katalog` | Menampilkan daftar seluruh mata kuliah | Tidak Ada |
+| 6 | `GET` | `/katalog/{kode}` | Menampilkan detail satu mata kuliah berdasarkan kode | Tidak Ada |
+| 7 | `GET` | `/admin/katalog` | Menampilkan katalog terproteksi khusus role admin | `role.admin` |
 
-## Code of Conduct
+## 5. Skenario Pengujian (Test Case)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Pengujian dilakukan menggunakan *web browser* dengan 5 skenario utama sesuai ketentuan modul:
 
-## Security Vulnerabilities
+### **Test Case 1: Parameter Wajib dengan Constraint Angka (Berhasil)**
+* **URL:** `http://127.0.0.1:8000/mahasiswa/23010001`
+* **Method:** `GET`
+* **Hasil yang Diharapkan:** Mengembalikan respons JSON `{"nim":"23010001","status":"aktif"}` dengan status HTTP **200 OK**.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### **Test Case 2: Constraint Parameter Gagal (Non-Angka)**
+* **URL:** `http://127.0.0.1:8000/mahasiswa/ABC`
+* **Method:** `GET`
+* **Hasil yang Diharapkan:** Menampilkan halaman **404 Not Found** karena parameter `ABC` ditolak oleh aturan `whereNumber('nim')`.
 
-## License
+### **Test Case 3: Dependency Injection pada Service & Controller**
+* **URL:** `http://127.0.0.1:8000/katalog`
+* **Method:** `GET`
+* **Hasil yang Diharapkan:** Mengembalikan respons JSON daftar mata kuliah dari `KatalogService` dengan status HTTP **200 OK**.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### **Test Case 4: Proteksi Middleware (Akses Ditolak)**
+* **URL:** `http://127.0.0.1:8000/admin/katalog`
+* **Method:** `GET`
+* **Hasil yang Diharapkan:** Menampilkan teks pesan `"Akses ditolak"` dengan status HTTP **403 Forbidden** karena tidak menyertakan query parameter admin.
+
+### **Test Case 5: Proteksi Middleware (Akses Diterima)**
+* **URL:** `http://127.0.0.1:8000/admin/katalog?role=admin`
+* **Method:** `GET`
+* **Hasil yang Diharapkan:** Menampilkan data JSON katalog mata kuliah dengan status HTTP **200 OK** karena query `role=admin` berhasil divalidasi oleh *middleware*.
+
+## 6. Verifikasi Rute Aplikasi
+
+Untuk memverifikasi seluruh rute yang telah dikonfigurasi pada file `routes/web.php`, jalankan perintah berikut pada terminal:
+
+```bash
+php artisan route:list
+```
